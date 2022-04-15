@@ -6,7 +6,7 @@ const NavbarComponent = () => {
 	const { user, logInUser, logOutUser } = React.useContext(ChatContext);
 
 	return (
-		<Navbar bg="dark" variant="dark" expand="lg" className="border-bottom">
+		<Navbar bg="dark" variant="dark" expand="lg" className="border-bottom fixed-top w-100">
 			<Container fluid>
 				<Navbar.Brand href="#home">Chat Bluuweb</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -18,7 +18,7 @@ const NavbarComponent = () => {
 						</div>
 						<div className="d-flex">
 							<div>
-								{user.estado ? (
+								{user.state ? (
 									<Button
 										variant="danger"
 										onClick={() => {
@@ -30,6 +30,7 @@ const NavbarComponent = () => {
 								) : (
 									<Button
 										variant="success"
+										disabled={user.loading}
 										onClick={() => {
 											logInUser();
 										}}

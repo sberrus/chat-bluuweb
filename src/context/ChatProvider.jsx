@@ -5,7 +5,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 export const ChatContext = React.createContext();
 
 const ChatProvider = ({ children }) => {
-	const userInitialData = { uid: null, email: null, estado: null };
+	const userInitialData = { uid: null, email: null, state: false, loading: false };
 	const [user, setUser] = useState(userInitialData);
 
 	const detectUser = () => {
@@ -16,8 +16,8 @@ const ChatProvider = ({ children }) => {
 				// https://firebase.google.com/docs/reference/js/firebase.User
 				const uid = user.uid;
 				const email = user.email;
-				const estado = true;
-				setUser({ uid, email, estado });
+				const state = true;
+				setUser({ uid, email, state: state });
 			} else {
 				// User is signed out
 				setUser(userInitialData);
@@ -26,20 +26,17 @@ const ChatProvider = ({ children }) => {
 	};
 
 	const logInUser = () => {
+		//Loading
+		setUser({ ...user, loading: true });
 		//
 		const auth = getAuth();
 		const provider = new GoogleAuthProvider();
 		signInWithPopup(auth, provider)
 			.then((result) => {
-				// This gives you a Google Access Token. You can use it to access the Google API.
-				const credential = GoogleAuthProvider.credentialFromResult(result);
-				const token = credential.accessToken;
 				// The signed-in user info.
 				const user = result.user;
-				// ...
 
-				console.log(user);
-				setUser({ ...user, estado: true });
+				setUser({ ...user, state: true, loading: false });
 			})
 			.catch((error) => {
 				// Handle Errors here.
@@ -49,11 +46,12 @@ const ChatProvider = ({ children }) => {
 			});
 	};
 	const logOutUser = () => {
+		setUser({ ...user, loading: true });
 		const auth = getAuth();
 		signOut(auth)
 			.then(() => {
 				// Sign-out successful.
-				setUser({ ...user, estado: false });
+				setUser(userInitialData);
 			})
 			.catch((error) => {
 				// An error happened.
