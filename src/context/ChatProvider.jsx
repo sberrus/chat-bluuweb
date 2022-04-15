@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 //Firebase
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
 
 export const ChatContext = React.createContext();
 
@@ -26,10 +26,39 @@ const ChatProvider = ({ children }) => {
 	};
 
 	const logInUser = () => {
-		setUser({ ...user, estado: true });
+		//
+		const auth = getAuth();
+		const provider = new GoogleAuthProvider();
+		signInWithPopup(auth, provider)
+			.then((result) => {
+				// This gives you a Google Access Token. You can use it to access the Google API.
+				const credential = GoogleAuthProvider.credentialFromResult(result);
+				const token = credential.accessToken;
+				// The signed-in user info.
+				const user = result.user;
+				// ...
+
+				console.log(user);
+				setUser({ ...user, estado: true });
+			})
+			.catch((error) => {
+				// Handle Errors here.
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.error({ errorCode, errorMessage });
+			});
 	};
 	const logOutUser = () => {
-		setUser({ ...user, estado: false });
+		const auth = getAuth();
+		signOut(auth)
+			.then(() => {
+				// Sign-out successful.
+				setUser({ ...user, estado: false });
+			})
+			.catch((error) => {
+				// An error happened.
+				console.error(error);
+			});
 	};
 
 	useEffect(() => {

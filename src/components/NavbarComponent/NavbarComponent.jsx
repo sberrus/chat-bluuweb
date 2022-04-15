@@ -17,25 +17,27 @@ const NavbarComponent = () => {
 							<Nav.Link href="#link">Link</Nav.Link>
 						</div>
 						<div className="d-flex">
-							{user.estado ? (
-								<Button
-									variant="danger"
-									onClick={() => {
-										logOutUser();
-									}}
-								>
-									<i className="bi bi-power"></i>
-								</Button>
-							) : (
-								<Button
-									variant="success"
-									onClick={() => {
-										logInUser();
-									}}
-								>
-									Iniciar Sesión
-								</Button>
-							)}
+							<div>
+								{user.estado ? (
+									<Button
+										variant="danger"
+										onClick={() => {
+											logOutUser();
+										}}
+									>
+										<i className="bi bi-power"></i>
+									</Button>
+								) : (
+									<Button
+										variant="success"
+										onClick={() => {
+											logInUser();
+										}}
+									>
+										Iniciar Sesión
+									</Button>
+								)}
+							</div>
 						</div>
 					</Nav>
 				</Navbar.Collapse>
