@@ -3,7 +3,7 @@ import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { ChatContext } from "../../context/ChatProvider";
 
 const NavbarComponent = () => {
-	const { user, logInUser, logOutUser } = React.useContext(ChatContext);
+	const { user, googleLogInWithPopUp, logOutUser } = React.useContext(ChatContext);
 
 	return (
 		<Navbar bg="dark" variant="dark" expand="lg" className="border-bottom fixed-top w-100">
@@ -32,7 +32,7 @@ const NavbarComponent = () => {
 										variant="success"
 										disabled={user.loading}
 										onClick={() => {
-											logInUser();
+											googleLogInWithPopUp();
 										}}
 									>
 										Iniciar Sesión

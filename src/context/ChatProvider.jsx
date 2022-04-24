@@ -5,15 +5,19 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 export const ChatContext = React.createContext();
 
 const ChatProvider = ({ children }) => {
+	// initial state of the data
 	const userInitialData = { uid: null, email: null, state: false, loading: false };
+
+	// states
 	const [user, setUser] = useState(userInitialData);
 
+	/**
+	 * Detects if user is signed in and save the sesión.
+	 */
 	const detectUser = () => {
 		const auth = getAuth();
 		onAuthStateChanged(auth, (user) => {
 			if (user) {
-				// User is signed in, see docs for a list of available properties
-				// https://firebase.google.com/docs/reference/js/firebase.User
 				const uid = user.uid;
 				const email = user.email;
 				const state = true;
@@ -25,17 +29,23 @@ const ChatProvider = ({ children }) => {
 		});
 	};
 
-	const logInUser = () => {
-		//Loading
+	/**
+	 * Firebase´s google log-in system with pop up.
+	 */
+	const googleLogInWithPopUp = () => {
+		//Loading.
 		setUser({ ...user, loading: true });
-		//
+
+		//Firebase Log in.
 		const auth = getAuth();
 		const provider = new GoogleAuthProvider();
+
 		signInWithPopup(auth, provider)
 			.then((result) => {
 				// The signed-in user info.
 				const user = result.user;
 
+				//Update State.
 				setUser({ ...user, state: true, loading: false });
 			})
 			.catch((error) => {
@@ -45,6 +55,10 @@ const ChatProvider = ({ children }) => {
 				console.error({ errorCode, errorMessage });
 			});
 	};
+
+	/**
+	 * Firebase`s google log-out system.
+	 */
 	const logOutUser = () => {
 		setUser({ ...user, loading: true });
 		const auth = getAuth();
@@ -60,12 +74,17 @@ const ChatProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
+		// Dispatch every time the user interact with this provider.
 		detectUser();
 
 		return () => {};
 	}, []);
 
-	return <ChatContext.Provider value={{ user, logInUser, logOutUser }}>{children}</ChatContext.Provider>;
+	return (
+		<ChatContext.Provider value={{ user, googleLogInWithPopUp, logOutUser }}>
+			{children}
+		</ChatContext.Provider>
+	);
 };
 
 export default ChatProvider;

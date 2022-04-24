@@ -4,7 +4,9 @@ import { Badge, Container, ListGroup } from "react-bootstrap";
 const Chat = () => {
 	return (
 		<Container className="d-flex align-items-center justify-content-center h-100">
+			{/* Chat container */}
 			<div className="h-75 w-25 border">
+				{/* contact list */}
 				<ListGroup as="ol">
 					<ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
 						<div className="ms-2 me-auto">
@@ -26,6 +28,7 @@ const Chat = () => {
 					</ListGroup.Item>
 				</ListGroup>
 			</div>
+
 			<div className="h-75 w-75 border position-relative">
 				{/* main chat */}
 				<div>
