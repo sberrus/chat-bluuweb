@@ -14,7 +14,7 @@ const NavbarComponent = () => {
 					<Nav className="w-100 d-flex justify-content-between">
 						<div className="d-flex">
 							<Nav.Link href="#home">Home</Nav.Link>
-							<Nav.Link href="#link">Link</Nav.Link>
+							<Nav.Link href="#chatEnd">Link</Nav.Link>
 						</div>
 						<div className="d-flex">
 							<div>

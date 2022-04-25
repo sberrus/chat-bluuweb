@@ -1,10 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Badge, Container, ListGroup } from "react-bootstrap";
 import { ChatContext } from "../../context/ChatProvider";
 import InputForm from "./components/InputForm/InputForm";
 
 const Chat = () => {
 	const { messages, user } = useContext(ChatContext);
+	const scrollBox = useRef();
+
+	useEffect(() => {
+		console.log(scrollBox.current);
+		return () => {};
+	}, []);
 
 	return (
 		<Container className="d-flex align-items-center justify-content-center h-100">
@@ -17,27 +23,22 @@ const Chat = () => {
 							<div className="fw-bold">chat user 1</div>
 							hola mundo!
 						</div>
-						<Badge bg="primary" pill>
-							14
-						</Badge>
+						<Badge bg="primary">14</Badge>
 					</ListGroup.Item>
 					<ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
 						<div className="ms-2 me-auto">
 							<div className="fw-bold">chat user 1</div>
 							hola mundo!
 						</div>
-						<Badge bg="primary" pill>
-							14
-						</Badge>
+						<Badge bg="primary">14</Badge>
 					</ListGroup.Item>
 				</ListGroup>
 			</div>
 
-			<div className="h-75 w-75 border position-relative">
-				{/* main chat */}
-				<div>
+			<div className="h-75 w-75 position-relative border">
+				<div className="w-100 h-100 position-relative overflow-auto" ref={scrollBox}>
+					{/* main chat */}
 					{/* conversation body */}
-
 					{messages.map((message, idx) => {
 						const owner = message.owner.slice(-5);
 						const date = new Date(message.date);
@@ -65,7 +66,7 @@ const Chat = () => {
 						);
 					})}
 				</div>
-				<InputForm />
+				<InputForm scrollBox={scrollBox} />
 			</div>
 		</Container>
 	);

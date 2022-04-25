@@ -2,7 +2,7 @@ import { addDoc, collection, doc, getFirestore } from "firebase/firestore";
 import React, { useContext, useState } from "react";
 import { ChatContext } from "../../../../context/ChatProvider";
 
-const InputForm = () => {
+const InputForm = ({ scrollBox }) => {
 	const { user } = useContext(ChatContext);
 
 	const messageInitialData = {
@@ -32,11 +32,12 @@ const InputForm = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		scrollBox.current.scrollTop = scrollBox.current.scrollHeight;
 		sendMessage();
 	};
 
 	return (
-		<div className="position-absolute bottom-0 w-100">
+		<div className="float-end bottom-0 w-100 bg-dark">
 			{/* text input form */}
 			<div className="w-100 px-3 py-1 border-top pt-3">
 				<form className="d-flex" onSubmit={handleSubmit}>
