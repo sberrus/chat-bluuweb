@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Badge, Container, ListGroup } from "react-bootstrap";
+import { ChatContext } from "../../context/ChatProvider";
+import InputForm from "./components/InputForm/InputForm";
 
 const Chat = () => {
+	const { messages, user } = useContext(ChatContext);
+
 	return (
 		<Container className="d-flex align-items-center justify-content-center h-100">
 			{/* Chat container */}
@@ -33,24 +37,35 @@ const Chat = () => {
 				{/* main chat */}
 				<div>
 					{/* conversation body */}
-					<div className="text-end m-2">
-						<span className="badge bg-success p-2">mensaje usuario activo</span>
-					</div>
-					<div className="text-start m-2">
-						<span className="badge bg-warning p-2">mensaje usuario externo</span>
-					</div>
+
+					{messages.map((message, idx) => {
+						const owner = message.owner.slice(-5);
+						const date = new Date(message.date);
+						const hours = date.getHours();
+						const minutes = date.getMinutes();
+
+						return message.owner === user.uid ? (
+							<div className="text-end m-2" key={idx}>
+								{/* mensaje propio */}
+								<p className="badge bg-success p-2 mt-1">
+									<span className="text-end float-end">Yo</span> <br />
+									<span className="text-dark">{message.body}</span> <br />
+									<span className="float-end my-1">{`${hours}:${minutes}`}</span>
+								</p>
+							</div>
+						) : (
+							<div className="text-start m-2" key={idx}>
+								{/* mensaje externo */}
+								<p className="badge bg-warning p-2 mt-1">
+									<span className="text-end float-end"> {`...${owner}`}</span> <br />
+									<span className="text-dark">{message.body}</span> <br />
+									<span className="float-end my-1">{`${hours}:${date.getMinutes()}`}</span>
+								</p>
+							</div>
+						);
+					})}
 				</div>
-				<div className="position-absolute bottom-0 w-100">
-					{/* text input form */}
-					<div className="w-100 px-3 py-1 border-top pt-3">
-						<form className="d-flex">
-							<input type="text" className="w-100 form-control me-1" />
-							<button className="btn btn-success px-4">
-								<i className="bi bi-send"></i>
-							</button>
-						</form>
-					</div>
-				</div>
+				<InputForm />
 			</div>
 		</Container>
 	);

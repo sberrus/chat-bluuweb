@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
+
 //Firebase
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
+import { onSnapshot, getFirestore, query, collection, orderBy, where } from "firebase/firestore";
 
 export const ChatContext = React.createContext();
 
 const ChatProvider = ({ children }) => {
-	// initial state of the data
+	// user state
 	const userInitialData = { uid: null, email: null, state: false, loading: false };
-
-	// states
 	const [user, setUser] = useState(userInitialData);
 
+	// chat
+	const [messages, setMessages] = useState([]);
+
 	/**
-	 * Detects if user is signed in and save the sesión.
+	 * Detects if user is loged-in and save the sesion.
 	 */
-	const detectUser = () => {
+	const isLoggedIn = () => {
 		const auth = getAuth();
 		onAuthStateChanged(auth, (user) => {
+			console.log(user);
 			if (user) {
 				const uid = user.uid;
 				const email = user.email;
@@ -73,15 +77,35 @@ const ChatProvider = ({ children }) => {
 			});
 	};
 
+	/**
+	 * Carga todos los mensajes del chat de firebase en tiempo real.
+	 */
+	const cargarMensajes = () => {
+		const db = getFirestore();
+		const chatCollection = query(collection(db, "chat"), orderBy("date", "asc"));
+		const unsubscribe = onSnapshot(chatCollection, (chatColectionSnapshot) => {
+			const chat = [];
+
+			// pushin mesages to the chat
+			chatColectionSnapshot.forEach((doc) => {
+				chat.push(doc.data());
+			});
+
+			// Updating state
+			setMessages(chat);
+		});
+	};
+
 	useEffect(() => {
 		// Dispatch every time the user interact with this provider.
-		detectUser();
+		isLoggedIn();
+		cargarMensajes();
 
 		return () => {};
 	}, []);
 
 	return (
-		<ChatContext.Provider value={{ user, googleLogInWithPopUp, logOutUser }}>
+		<ChatContext.Provider value={{ user, googleLogInWithPopUp, logOutUser, messages }}>
 			{children}
 		</ChatContext.Provider>
 	);

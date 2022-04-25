@@ -5,7 +5,7 @@ import App from "./App";
 import "./firebase/firebase";
 //Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css"
+import "bootstrap-icons/font/bootstrap-icons.css";
 //Contexts
 import ChatProvider from "./context/ChatProvider";
 
