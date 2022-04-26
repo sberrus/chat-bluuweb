@@ -9,7 +9,6 @@ function App() {
 	const { user } = React.useContext(ChatContext);
 
 	useEffect(() => {
-		console.log(user);
 		return () => {};
 	}, []);
 	return (

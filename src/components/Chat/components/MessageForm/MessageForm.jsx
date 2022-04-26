@@ -2,7 +2,7 @@ import { addDoc, collection, doc, getFirestore } from "firebase/firestore";
 import React, { useContext, useState } from "react";
 import { ChatContext } from "../../../../context/ChatProvider";
 
-const InputForm = ({ scrollBox }) => {
+const MessageForm = ({ chatContainerRef }) => {
 	const { user } = useContext(ChatContext);
 
 	const messageInitialData = {
@@ -30,10 +30,14 @@ const InputForm = ({ scrollBox }) => {
 		setMessage(e.target.value);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		scrollBox.current.scrollTop = scrollBox.current.scrollHeight;
-		sendMessage();
+
+		if (message) {
+			await sendMessage();
+			chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+			setMessage("");
+		}
 	};
 
 	return (
@@ -58,4 +62,4 @@ const InputForm = ({ scrollBox }) => {
 	);
 };
 
-export default InputForm;
+export default MessageForm;

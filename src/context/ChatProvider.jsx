@@ -20,7 +20,6 @@ const ChatProvider = ({ children }) => {
 	const isLoggedIn = () => {
 		const auth = getAuth();
 		onAuthStateChanged(auth, (user) => {
-			console.log(user);
 			if (user) {
 				const uid = user.uid;
 				const email = user.email;
@@ -57,6 +56,7 @@ const ChatProvider = ({ children }) => {
 				const errorCode = error.code;
 				const errorMessage = error.message;
 				console.error({ errorCode, errorMessage });
+				setUser({ ...user, loading: false });
 			});
 	};
 
@@ -80,7 +80,7 @@ const ChatProvider = ({ children }) => {
 	/**
 	 * Carga todos los mensajes del chat de firebase en tiempo real.
 	 */
-	const cargarMensajes = () => {
+	const loadMessages = () => {
 		const db = getFirestore();
 		const chatCollection = query(collection(db, "chat"), orderBy("date", "asc"));
 		const unsubscribe = onSnapshot(chatCollection, (chatColectionSnapshot) => {
@@ -99,7 +99,7 @@ const ChatProvider = ({ children }) => {
 	useEffect(() => {
 		// Dispatch every time the user interact with this provider.
 		isLoggedIn();
-		cargarMensajes();
+		loadMessages();
 
 		return () => {};
 	}, []);

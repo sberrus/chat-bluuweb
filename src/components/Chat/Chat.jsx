@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { Badge, Container, ListGroup } from "react-bootstrap";
 import { ChatContext } from "../../context/ChatProvider";
-import InputForm from "./components/InputForm/InputForm";
+import MessageForm from "./components/MessageForm/MessageForm";
 
 const Chat = () => {
 	const { messages, user } = useContext(ChatContext);
-	const scrollBox = useRef();
+	const chatContainerRef = useRef();
 
 	useEffect(() => {
-		console.log(scrollBox.current);
+		console.log(chatContainerRef.current);
+
 		return () => {};
 	}, []);
 
@@ -36,7 +37,7 @@ const Chat = () => {
 			</div>
 
 			<div className="h-75 w-75 position-relative border">
-				<div className="w-100 h-100 position-relative overflow-auto" ref={scrollBox}>
+				<div className="w-100 h-100 position-relative overflow-auto" ref={chatContainerRef}>
 					{/* main chat */}
 					{/* conversation body */}
 					{messages.map((message, idx) => {
@@ -47,7 +48,7 @@ const Chat = () => {
 
 						return message.owner === user.uid ? (
 							<div className="text-end m-2" key={idx}>
-								{/* mensaje propio */}
+								{/* Own Message */}
 								<p className="badge bg-success p-2 mt-1">
 									<span className="text-end float-end">Yo</span> <br />
 									<span className="text-dark">{message.body}</span> <br />
@@ -56,7 +57,7 @@ const Chat = () => {
 							</div>
 						) : (
 							<div className="text-start m-2" key={idx}>
-								{/* mensaje externo */}
+								{/* External user message */}
 								<p className="badge bg-warning p-2 mt-1">
 									<span className="text-end float-end"> {`...${owner}`}</span> <br />
 									<span className="text-dark">{message.body}</span> <br />
@@ -66,7 +67,7 @@ const Chat = () => {
 						);
 					})}
 				</div>
-				<InputForm scrollBox={scrollBox} />
+				<MessageForm chatContainerRef={chatContainerRef} />
 			</div>
 		</Container>
 	);
