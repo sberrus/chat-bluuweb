@@ -86,16 +86,13 @@ const ChatProvider = ({ children }) => {
 		const db = getFirestore();
 		const chatCollection = query(collection(db, "chat"), orderBy("date", "asc"));
 
+		// Setting the "listener" for this request.
 		const unsubscribe = onSnapshot(chatCollection, (chatColectionSnapshot) => {
-			const chat = [];
-
-			// pushin mesages to the chat.
-			chatColectionSnapshot.forEach((doc) => {
-				chat.push(doc.data());
-			});
+			// Getting the messages
+			const chatMessages = chatColectionSnapshot.docs.map((message) => message.data());
 
 			// Updating state.
-			setMessages(chat);
+			setMessages(chatMessages);
 		});
 	};
 

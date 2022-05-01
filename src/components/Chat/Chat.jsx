@@ -8,8 +8,6 @@ const Chat = () => {
 	const chatContainerRef = useRef();
 
 	useEffect(() => {
-		console.log(chatContainerRef.current);
-
 		return () => {};
 	}, []);
 
