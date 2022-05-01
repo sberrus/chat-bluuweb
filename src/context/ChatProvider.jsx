@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 //Firebase
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
-import { onSnapshot, getFirestore, query, collection, orderBy, where } from "firebase/firestore";
+import { onSnapshot, getFirestore, query, collection, orderBy } from "firebase/firestore";
 
 export const ChatContext = React.createContext();
 
@@ -43,7 +43,7 @@ const ChatProvider = ({ children }) => {
 		const auth = getAuth();
 		const provider = new GoogleAuthProvider();
 
-		// Usar popup de google para iniciar sesión.
+		// Displaying Google`s Popup Login service.
 		signInWithPopup(auth, provider)
 			.then((result) => {
 				// The signed-in user info.

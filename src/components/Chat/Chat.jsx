@@ -8,8 +8,9 @@ const Chat = () => {
 	const chatContainerRef = useRef();
 
 	useEffect(() => {
+		chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
 		return () => {};
-	}, []);
+	}, [messages]);
 
 	return (
 		<Container className="d-flex align-items-center justify-content-center h-100">
