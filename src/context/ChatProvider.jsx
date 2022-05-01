@@ -88,6 +88,7 @@ const ChatProvider = ({ children }) => {
 
 		const unsubscribe = onSnapshot(chatCollection, (chatColectionSnapshot) => {
 			const chat = [];
+
 			// pushin mesages to the chat.
 			chatColectionSnapshot.forEach((doc) => {
 				chat.push(doc.data());
