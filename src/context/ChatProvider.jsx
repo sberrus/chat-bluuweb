@@ -43,6 +43,7 @@ const ChatProvider = ({ children }) => {
 		const auth = getAuth();
 		const provider = new GoogleAuthProvider();
 
+		// Usar popup de google para iniciar sesión.
 		signInWithPopup(auth, provider)
 			.then((result) => {
 				// The signed-in user info.
@@ -66,6 +67,7 @@ const ChatProvider = ({ children }) => {
 	const logOutUser = () => {
 		setUser({ ...user, loading: true });
 		const auth = getAuth();
+
 		signOut(auth)
 			.then(() => {
 				// Sign-out successful.
@@ -83,21 +85,20 @@ const ChatProvider = ({ children }) => {
 	const loadMessages = () => {
 		const db = getFirestore();
 		const chatCollection = query(collection(db, "chat"), orderBy("date", "asc"));
+
 		const unsubscribe = onSnapshot(chatCollection, (chatColectionSnapshot) => {
 			const chat = [];
-
-			// pushin mesages to the chat
+			// pushin mesages to the chat.
 			chatColectionSnapshot.forEach((doc) => {
 				chat.push(doc.data());
 			});
 
-			// Updating state
+			// Updating state.
 			setMessages(chat);
 		});
 	};
 
 	useEffect(() => {
-		// Dispatch every time the user interact with this provider.
 		isLoggedIn();
 		loadMessages();
 

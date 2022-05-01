@@ -3,17 +3,21 @@ import React, { useContext, useState } from "react";
 import { ChatContext } from "../../../../context/ChatProvider";
 
 const MessageForm = ({ chatContainerRef }) => {
+	//Context
 	const { user } = useContext(ChatContext);
-
+	//Message Model
 	const messageInitialData = {
 		body: "",
 		date: 0,
 		owner: user.uid,
 		state: true,
 	};
-
+	//State
 	const [message, setMessage] = useState("");
 
+	/**
+	 * Format the message info and save it in firestore
+	 */
 	const sendMessage = async () => {
 		const payload = {
 			...messageInitialData,
